@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head lang="en">
+        <meta charset="UTF-8" />
+        <title>Register</title>
+    </head>
+    <body>
+        
+        <h1>Rekisteröidy</h1>
+
+        <form method="POST" th:action="@{/register}">
+            <p>käyttäjänimi</p>
+            <input type="text" name="username"/>
+            <p>nimi</p>
+            <input type="text" name="name"/>
+            <p>salasana</p>
+            <input type="password" name="password"/>
+            <input type="submit" value="Luo tili!"/>
+        </form>
+
+        <p>
+            <a th:href="@{/login}">Kirjaudu sisään</a></li>
+        </p>
+        
+    </body>
+</html>

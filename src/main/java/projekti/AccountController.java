@@ -1,4 +1,3 @@
-
 package projekti;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +23,20 @@ public class AccountController {
         return "accounts";
     }
 
-    @PostMapping("/accounts")
+    @GetMapping("/register")
+    public String registerPage() {
+        return "register";
+    }
+
+    @PostMapping("/register")
     public String add(@RequestParam String username, @RequestParam String name, @RequestParam String password) {
         if (accountRepository.findByUsername(username) != null) {
-            return "redirect:/accounts";
+            return "redirect:/register";
         }
-        
+
         Account a = new Account(username, name, passwordEncoder.encode(password));
         accountRepository.save(a);
-        return "redirect:/accounts";
+        return "redirect:/";
     }
 
 }
