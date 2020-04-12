@@ -1,12 +1,24 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/security/tags">
     <head>
         <meta charset="UTF-8" />
-        <title>Hello world</title>
+        <title>Tervetuloa</title>
     </head>
     <body>
 
-        <h1 th:text="${'Hello ' + message}">Hello world</h1>
+        <h1>Tervetuloa!</h1>
+
+        <div sec:authorize="isAuthenticated()">
+            <h2>Olet kirjautunut!</h2>
+        </div>
+
+        <p>
+            <a th:href="@{/login}">Kirjaudu sisään</a></li>
+        </p>
+
+        <p>
+            <a th:href="@{/accounts}">Rekisteröidy</a></li>
+        </p>
 
 
     </body>
