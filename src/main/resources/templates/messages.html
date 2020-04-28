@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Messages</title>
+    </head>
+    <body>
+        <h1>Chatti</h1>
+
+        <ul>
+            <li th:each="message : ${messages}">
+                <p><span th:text="${message.content}">msg</span> - by: <span th:text="${message.writer}">writer</span> - <span th:text="${message.date}">date</span></p>
+            </li>
+        </ul>
+        
+
+        <form th:action="@{/messages}" method="POST">
+            <input name="message"></input>
+            <input type="submit" value="Lisää viesti!"></input>
+        </form>
+
+    </body>
+</html>
