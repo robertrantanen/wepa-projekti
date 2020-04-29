@@ -26,6 +26,21 @@
             </form>
 
 
+            <h2>Taidot</h2>
+
+            <ul>
+                <li th:each="skill : ${account.skills}">
+                    <p><span th:text="${skill.skill}">skill</span>, <span th:text="${skill.likes}">skill</span> tykkäystä</p>
+                </li>
+            </ul>
+
+
+
+            <form th:action="@{/}" method="POST">
+                <input name="name"></input>
+                <input type="submit" value="Lisää taito!"></input>
+            </form>
+
             <p>
                 <a th:href="@{/accounts}">Henkilölista</a>
             </p>
