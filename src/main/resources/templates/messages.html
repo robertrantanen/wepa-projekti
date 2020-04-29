@@ -9,15 +9,21 @@
 
         <ul>
             <li th:each="message : ${messages}">
-                <p><span th:text="${message.content}">msg</span> - by: <span th:text="${message.writer}">writer</span> - <span th:text="${message.date}">date</span></p>
+                <h3><span th:text="${message.content}">msg</span></h3>
+                <p><span th:text="${message.writer}">writer</span> - <span th:text="${message.date}">date</span></p>
             </li>
         </ul>
-        
+
 
         <form th:action="@{/messages}" method="POST">
             <input name="message"></input>
             <input type="submit" value="Lisää viesti!"></input>
         </form>
+
+
+        <p>
+            <a th:href="@{/}">Oma sivu</a>
+        </p>
 
     </body>
 </html>

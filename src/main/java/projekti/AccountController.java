@@ -1,6 +1,8 @@
 package projekti;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,17 @@ public class AccountController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @GetMapping("/")
+    public String home(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth == null)) {
+            String username = auth.getName();
+            Account account = accountRepository.findByUsername(username);
+            model.addAttribute("account", account);
+        }
+        return "index";
+    }
 
     @GetMapping("/accounts")
     public String list(Model model) {
@@ -36,7 +49,7 @@ public class AccountController {
 
         Account a = new Account(username, name, passwordEncoder.encode(password));
         accountRepository.save(a);
-        return "redirect:/";
+        return "redirect:/login";
     }
 
 }

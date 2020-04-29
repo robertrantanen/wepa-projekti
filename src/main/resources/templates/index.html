@@ -8,30 +8,32 @@
 
         <div sec:authorize="!isAuthenticated()">
             <h1>Tervetuloa!</h1>
+
+            <p>
+                <a th:href="@{/login}">Kirjaudu sisään</a>
+            </p>
+
+            <p>
+                <a th:href="@{/register}">Rekisteröidy</a>
+            </p>
+
         </div>
 
         <div sec:authorize="isAuthenticated()">
-            <h1>Tervetuloa  <span sec:authentication="name">Username</span>!</h1>
+            <h1>Tervetuloa  <span th:text="${account.username}">username</span>, <span th:text="${account.name}">name</span>!</h1>
             <form th:action="@{/logout}" method="POST">
                 <input type="submit" value="Kirjaudu ulos"></input>
             </form>
+
+
+            <p>
+                <a th:href="@{/accounts}">Henkilölista</a>
+            </p>
+
+            <p>
+                <a th:href="@{/messages}">Chatti</a>
+            </p>
         </div>
-
-        <p>
-            <a th:href="@{/login}">Kirjaudu sisään</a></li>
-        </p>
-
-        <p>
-            <a th:href="@{/register}">Rekisteröidy</a></li>
-        </p>
-
-        <p>
-            <a th:href="@{/accounts}">Henkilölista</a></li>
-        </p>
-
-        <p>
-            <a th:href="@{/messages}">Chatti</a></li>
-        </p>
 
 
     </body>

@@ -10,9 +10,13 @@
 
         <ol>
             <li th:each="account : ${accounts}">
-                <span th:text="${account.name}">msg</span>
+                <span th:text="${account.name}">name</span>
             </li>
         </ol>
-        
+
+        <p>
+            <a th:href="@{/}">Oma sivu</a>
+        </p>
+
     </body>
 </html>
