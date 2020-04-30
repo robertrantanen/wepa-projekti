@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -34,6 +35,14 @@ public class MessageController {
         msg.setWriter(username);
         messageRepository.save(msg);
 
+        return "redirect:/messages";
+    }
+
+    @PostMapping("/messages/{id}")
+    public String likeMessages(@PathVariable Long id) {
+        Message msg = messageRepository.getOne(id);
+        msg.setLikes(msg.getLikes() + 1);
+        messageRepository.save(msg);
         return "redirect:/messages";
     }
 }

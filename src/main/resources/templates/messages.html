@@ -10,7 +10,13 @@
         <ul>
             <li th:each="message : ${messages}">
                 <h3><span th:text="${message.content}">msg</span></h3>
-                <p><span th:text="${message.writer}">writer</span> - <span th:text="${message.date}">date</span></p>
+                <span th:text="${message.writer}">writer</span>
+                - <span th:text="${message.date}">date</span>
+                - <span th:text="${message.likes}">likes</span> tykkäystä
+                <form method="POST" th:action="@{/messages/{id}(id=${message.id})}">
+                    <input type="submit" value="Tykkää!"/>
+                </form>
+
             </li>
         </ul>
 

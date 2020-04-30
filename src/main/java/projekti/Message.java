@@ -17,5 +17,6 @@ public class Message extends AbstractPersistable<Long> {
     private LocalDateTime date = LocalDateTime.now();
     private String content;
     private String writer;
+    private int likes = 0;
  
 }
