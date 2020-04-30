@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -40,6 +41,20 @@ public class AccountController {
         return "accounts";
     }
 
+    @GetMapping("/accounts/{id}")
+    public String getOne(Model model, @PathVariable Long id) {
+        model.addAttribute("account", accountRepository.getOne(id));
+        return "account";
+    }
+
+    @PostMapping("/accounts/{id}/skills/{skillId}")
+    public String likeSkill(@PathVariable Long id, @PathVariable Long skillId) {
+        Skill skill = skillRepository.getOne(skillId);
+        skill.setLikes(skill.getLikes() + 1);
+        skillRepository.save(skill);
+        return "redirect:/accounts/{id}";
+    }
+
     @GetMapping("/register")
     public String registerPage() {
         return "register";
@@ -65,7 +80,7 @@ public class AccountController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         Account account = accountRepository.findByUsername(username);
-        
+
         skill.setAccount(account);
 
         skillRepository.save(skill);

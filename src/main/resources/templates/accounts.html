@@ -8,11 +8,13 @@
 
         <h1>Henkilöt</h1>
 
-        <ol>
-            <li th:each="account : ${accounts}">
-                <span th:text="${account.name}">name</span>
+        <ul>
+            <li th:each="account: ${accounts}">
+                <a th:href="@{/accounts/{id}(id=${account.id})}">
+                    <span th:text="${account.name}">name</span>
+                </a>
             </li>
-        </ol>
+        </ul>
 
         <p>
             <a th:href="@{/}">Oma sivu</a>
