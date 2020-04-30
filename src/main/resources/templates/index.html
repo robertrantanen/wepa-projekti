@@ -34,12 +34,26 @@
                 </li>
             </ul>
 
-
-
             <form th:action="@{/}" method="POST">
                 <input name="name"></input>
                 <input type="submit" value="Lisää taito!"></input>
             </form>
+
+            <h2>Odottavat yhteydet</h2>
+            
+            <ul>
+                <li th:each="connection : ${account.connectionsToThisAccount}">
+                    <span th:text="${connection.connecter.name}">name</span>
+                </li>
+            </ul>
+
+            <h2>Hyväksytyt yhteydet</h2>
+            
+            <ul>
+                <li th:each="connection : ${account.connectionsFromThisAccount}">
+                    <span th:text="${connection.receiver.name}">name</span>
+                </li>
+            </ul>
 
             <p>
                 <a th:href="@{/accounts}">Henkilölista</a>

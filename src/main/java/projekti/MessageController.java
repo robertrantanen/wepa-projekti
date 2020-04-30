@@ -19,6 +19,9 @@ public class MessageController {
     @Autowired
     private MessageRepository messageRepository;
 
+    @Autowired
+    AccountRepository accountRepository;
+
     @GetMapping("/messages")
     public String list(Model model) {
         Pageable pageable = PageRequest.of(0, 25, Sort.by("date").descending());
@@ -30,9 +33,11 @@ public class MessageController {
     public String create(@RequestParam String message) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
+        Account account = accountRepository.findByUsername(username);
         Message msg = new Message();
         msg.setContent(message);
-        msg.setWriter(username);
+        msg.setLikes(0);
+        msg.setWriter(account.getName());
         messageRepository.save(msg);
 
         return "redirect:/messages";

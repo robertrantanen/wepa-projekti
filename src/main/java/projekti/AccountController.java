@@ -22,6 +22,9 @@ public class AccountController {
     SkillRepository skillRepository;
 
     @Autowired
+    ConnectionRepository connectionRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
@@ -55,24 +58,39 @@ public class AccountController {
         return "redirect:/accounts/{id}";
     }
 
+    @PostMapping("/accounts/{id}")
+    public String addConnection(@PathVariable Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        Account connecter = accountRepository.findByUsername(username);
+        Account receiver = accountRepository.getOne(id);
+        Connection connection = new Connection(connecter, receiver, false);
+        connectionRepository.save(connection);
+        return "redirect:/accounts";
+    }
+
     @GetMapping("/register")
     public String registerPage() {
         return "register";
     }
 
     @PostMapping("/register")
-    public String add(@RequestParam String username, @RequestParam String name, @RequestParam String password) {
+    public String add(@RequestParam String username,
+            @RequestParam String name,
+            @RequestParam String password
+    ) {
         if (accountRepository.findByUsername(username) != null) {
             return "redirect:/register";
         }
 
-        Account a = new Account(username, name, passwordEncoder.encode(password), new ArrayList<>());
+        Account a = new Account(username, name, passwordEncoder.encode(password), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         accountRepository.save(a);
         return "redirect:/login";
     }
 
     @PostMapping("/")
-    public String addSkill(@RequestParam String name) {
+    public String addSkill(@RequestParam String name
+    ) {
         Skill skill = new Skill();
         skill.setSkill(name);
         skill.setLikes(0);

@@ -21,5 +21,11 @@ public class Account extends AbstractPersistable<Long> {
     
     @OneToMany(mappedBy = "account")
     private List<Skill> skills;
+    
+    @OneToMany(mappedBy = "connecter")
+    private List<Connection> connectionsFromThisAccount;
+    
+    @OneToMany(mappedBy = "receiver")
+    private List<Connection> connectionsToThisAccount;
 
 }
