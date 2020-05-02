@@ -64,7 +64,11 @@ public class AccountController {
 
     @GetMapping("/accounts")
     public String list(Model model) {
-        model.addAttribute("accounts", accountRepository.findAll());
+        List<Account> accounts = accountRepository.findAll();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        accounts.remove(accountRepository.findByUsername(username));
+        model.addAttribute("accounts", accounts);
         return "accounts";
     }
 
@@ -80,9 +84,7 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public String add(@RequestParam String username,
-            @RequestParam String name,
-            @RequestParam String password) {
+    public String add(@RequestParam String username, @RequestParam String name, @RequestParam String password) {
         if (accountRepository.findByUsername(username) != null) {
             return "redirect:/register";
         }

@@ -32,8 +32,21 @@ public class ConnectionController {
         String username = auth.getName();
         Account connecter = accountRepository.findByUsername(username);
         Account receiver = accountRepository.getOne(id);
-        Connection connection = new Connection(connecter, receiver, false);
-        connectionRepository.save(connection);
+        boolean notFound = true;
+        for (Connection connection : connecter.getConnectionsFromThisAccount()) {
+            if (connection.getReceiver().getUsername().equals(receiver.getUsername())) {
+                notFound = false;
+            }
+        }
+        for (Connection connection : connecter.getConnectionsToThisAccount()) {
+            if (connection.getReceiver().getUsername().equals(connecter.getUsername())) {
+                notFound = false;
+            }
+        }
+        if (notFound) {
+            Connection connection = new Connection(connecter, receiver, false);
+            connectionRepository.save(connection);
+        }
         return "redirect:/accounts/{id}";
     }
 
