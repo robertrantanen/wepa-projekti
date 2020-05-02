@@ -2,6 +2,7 @@
 package projekti;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,5 +19,6 @@ public class Message extends AbstractPersistable<Long> {
     private String content;
     private String writer;
     private int likes = 0;
+    private String likers;
  
 }

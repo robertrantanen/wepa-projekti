@@ -25,17 +25,22 @@ public class AccountController {
     @GetMapping("/")
     public String home(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth == null)) {
+        if (auth != null) {
             String username = auth.getName();
             Account account = accountRepository.findByUsername(username);
-            List<Connection> connectionsTo = account.getConnectionsToThisAccount();
-            List<Connection> connectionsFrom = account.getConnectionsFromThisAccount();
-            List<Connection> unacceptedConnections = new ArrayList<>();
+            List<Connection> connectionsTo = new ArrayList<>();
+            List<Connection> connectionsFrom = new ArrayList<>();
+            if (account != null) {
+                connectionsTo = account.getConnectionsToThisAccount();
+                connectionsFrom = account.getConnectionsFromThisAccount();
+            }
+            List<Connection> unacceptedConnectionsTo = new ArrayList<>();
+            List<Connection> unacceptedConnectionsFrom = new ArrayList<>();
             List<Connection> acceptedConnectionsTo = new ArrayList<>();
             List<Connection> acceptedConnectionsFrom = new ArrayList<>();
             for (Connection connection : connectionsTo) {
                 if (!connection.isAccepted()) {
-                    unacceptedConnections.add(connection);
+                    unacceptedConnectionsTo.add(connection);
                 } else {
                     acceptedConnectionsTo.add(connection);
                 }
@@ -43,13 +48,16 @@ public class AccountController {
             for (Connection connection : connectionsFrom) {
                 if (connection.isAccepted()) {
                     acceptedConnectionsFrom.add(connection);
-                } 
+                } else {
+                    unacceptedConnectionsFrom.add(connection);
+                }
             }
 
             model.addAttribute("account", account);
             model.addAttribute("acceptedConnectionsTo", acceptedConnectionsTo);
             model.addAttribute("acceptedConnectionsFrom", acceptedConnectionsFrom);
-            model.addAttribute("unacceptedConnections", unacceptedConnections);
+            model.addAttribute("unacceptedConnectionsTo", unacceptedConnectionsTo);
+            model.addAttribute("unacceptedConnectionsFrom", unacceptedConnectionsFrom);
         }
         return "index";
     }

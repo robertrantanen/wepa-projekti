@@ -1,5 +1,6 @@
 package projekti;
 
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +39,7 @@ public class MessageController {
         msg.setContent(message);
         msg.setLikes(0);
         msg.setWriter(account.getName());
+        msg.setLikers("");
         messageRepository.save(msg);
 
         return "redirect:/messages";
@@ -46,7 +48,12 @@ public class MessageController {
     @PostMapping("/messages/{id}")
     public String likeMessages(@PathVariable Long id) {
         Message msg = messageRepository.getOne(id);
-        msg.setLikes(msg.getLikes() + 1);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        if (!msg.getLikers().contains(username)) {
+            msg.setLikers(msg.getLikers() + username + " ");
+            msg.setLikes(msg.getLikes() + 1);
+        }
         messageRepository.save(msg);
         return "redirect:/messages";
     }

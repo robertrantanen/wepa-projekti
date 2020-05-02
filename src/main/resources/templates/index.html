@@ -42,13 +42,21 @@
             <h2>Odottavat yhteydet</h2>
 
             <ul>
-                <li th:each="connection : ${unacceptedConnections}">
+                <li th:each="connection : ${unacceptedConnectionsTo}">
                     <a th:href="@{/accounts/{id}(id=${connection.connecter.id})}">
                         <span th:text="${connection.connecter.name}">name</span>
                     </a>
                     <form method="POST" th:action="@{/connections/{id}(id=${connection.id})}">
                         <input type="submit" value="Hyväksy yhteys!"/>
                     </form>
+                </li>
+            </ul>
+
+            <ul>
+                <li th:each="connection : ${unacceptedConnectionsFrom}">
+                    <a th:href="@{/accounts/{id}(id=${connection.receiver.id})}">
+                        <span th:text="${connection.receiver.name}">name</span>
+                    </a> Odottaa käyttäjän hyväksyntää
                 </li>
             </ul>
 
@@ -77,6 +85,7 @@
             <p>
                 <a th:href="@{/messages}">Chatti</a>
             </p>
+
         </div>
 
 
