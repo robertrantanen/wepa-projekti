@@ -21,6 +21,9 @@
             </li>
         </ul>
 
+        <form method="POST" th:action="@{/accounts/{id}(id=${account.id})}">
+            <input type="submit" value="Lisää yhteys!"/>
+        </form>
 
 
         <p>

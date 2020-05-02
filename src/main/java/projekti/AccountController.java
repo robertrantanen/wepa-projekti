@@ -1,6 +1,7 @@
 package projekti;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,12 +20,6 @@ public class AccountController {
     AccountRepository accountRepository;
 
     @Autowired
-    SkillRepository skillRepository;
-
-    @Autowired
-    ConnectionRepository connectionRepository;
-
-    @Autowired
     PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
@@ -33,7 +28,28 @@ public class AccountController {
         if (!(auth == null)) {
             String username = auth.getName();
             Account account = accountRepository.findByUsername(username);
+            List<Connection> connectionsTo = account.getConnectionsToThisAccount();
+            List<Connection> connectionsFrom = account.getConnectionsFromThisAccount();
+            List<Connection> unacceptedConnections = new ArrayList<>();
+            List<Connection> acceptedConnectionsTo = new ArrayList<>();
+            List<Connection> acceptedConnectionsFrom = new ArrayList<>();
+            for (Connection connection : connectionsTo) {
+                if (!connection.isAccepted()) {
+                    unacceptedConnections.add(connection);
+                } else {
+                    acceptedConnectionsTo.add(connection);
+                }
+            }
+            for (Connection connection : connectionsFrom) {
+                if (connection.isAccepted()) {
+                    acceptedConnectionsFrom.add(connection);
+                } 
+            }
+
             model.addAttribute("account", account);
+            model.addAttribute("acceptedConnectionsTo", acceptedConnectionsTo);
+            model.addAttribute("acceptedConnectionsFrom", acceptedConnectionsFrom);
+            model.addAttribute("unacceptedConnections", unacceptedConnections);
         }
         return "index";
     }
@@ -50,25 +66,6 @@ public class AccountController {
         return "account";
     }
 
-    @PostMapping("/accounts/{id}/skills/{skillId}")
-    public String likeSkill(@PathVariable Long id, @PathVariable Long skillId) {
-        Skill skill = skillRepository.getOne(skillId);
-        skill.setLikes(skill.getLikes() + 1);
-        skillRepository.save(skill);
-        return "redirect:/accounts/{id}";
-    }
-
-    @PostMapping("/accounts/{id}")
-    public String addConnection(@PathVariable Long id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        Account connecter = accountRepository.findByUsername(username);
-        Account receiver = accountRepository.getOne(id);
-        Connection connection = new Connection(connecter, receiver, false);
-        connectionRepository.save(connection);
-        return "redirect:/accounts";
-    }
-
     @GetMapping("/register")
     public String registerPage() {
         return "register";
@@ -77,8 +74,7 @@ public class AccountController {
     @PostMapping("/register")
     public String add(@RequestParam String username,
             @RequestParam String name,
-            @RequestParam String password
-    ) {
+            @RequestParam String password) {
         if (accountRepository.findByUsername(username) != null) {
             return "redirect:/register";
         }
@@ -86,23 +82,6 @@ public class AccountController {
         Account a = new Account(username, name, passwordEncoder.encode(password), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         accountRepository.save(a);
         return "redirect:/login";
-    }
-
-    @PostMapping("/")
-    public String addSkill(@RequestParam String name
-    ) {
-        Skill skill = new Skill();
-        skill.setSkill(name);
-        skill.setLikes(0);
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        Account account = accountRepository.findByUsername(username);
-
-        skill.setAccount(account);
-
-        skillRepository.save(skill);
-        return "redirect:/";
     }
 
 }

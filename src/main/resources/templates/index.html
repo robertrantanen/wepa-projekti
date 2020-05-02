@@ -34,26 +34,41 @@
                 </li>
             </ul>
 
-            <form th:action="@{/}" method="POST">
+            <form th:action="@{/skills}" method="POST">
                 <input name="name"></input>
                 <input type="submit" value="Lisää taito!"></input>
             </form>
 
             <h2>Odottavat yhteydet</h2>
-            
+
             <ul>
-                <li th:each="connection : ${account.connectionsToThisAccount}">
-                    <span th:text="${connection.connecter.name}">name</span>
+                <li th:each="connection : ${unacceptedConnections}">
+                    <a th:href="@{/accounts/{id}(id=${connection.connecter.id})}">
+                        <span th:text="${connection.connecter.name}">name</span>
+                    </a>
+                    <form method="POST" th:action="@{/connections/{id}(id=${connection.id})}">
+                        <input type="submit" value="Hyväksy yhteys!"/>
+                    </form>
                 </li>
             </ul>
 
             <h2>Hyväksytyt yhteydet</h2>
-            
+
             <ul>
-                <li th:each="connection : ${account.connectionsFromThisAccount}">
-                    <span th:text="${connection.receiver.name}">name</span>
+                <li th:each="connection : ${acceptedConnectionsTo}">
+                    <a th:href="@{/accounts/{id}(id=${connection.connecter.id})}">
+                        <span th:text="${connection.connecter.name}">name</span>
+                    </a>
                 </li>
             </ul>
+            <ul>
+                <li th:each="connection : ${acceptedConnectionsFrom}">
+                    <a th:href="@{/accounts/{id}(id=${connection.receiver.id})}">
+                        <span th:text="${connection.receiver.name}">name</span>
+                    </a>
+                </li>
+            </ul>
+
 
             <p>
                 <a th:href="@{/accounts}">Henkilölista</a>
