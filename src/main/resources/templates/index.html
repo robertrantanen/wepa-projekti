@@ -49,6 +49,9 @@
                     <form method="POST" th:action="@{/connections/{id}(id=${connection.id})}">
                         <input type="submit" value="Hyväksy yhteys!"/>
                     </form>
+                    <form th:method="DELETE" th:action="@{/connections/{id}(id=${connection.id})}">
+                        <input type="submit" value="Hylkää yhteys!"/>
+                    </form>
                 </li>
             </ul>
 
@@ -67,6 +70,9 @@
                     <a th:href="@{/accounts/{id}(id=${connection.connecter.id})}">
                         <span th:text="${connection.connecter.name}">name</span>
                     </a>
+                    <form th:method="DELETE" th:action="@{/connections/{id}(id=${connection.id})}">
+                        <input type="submit" value="Poista yhteys!"/>
+                    </form>
                 </li>
             </ul>
             <ul>
@@ -74,6 +80,9 @@
                     <a th:href="@{/accounts/{id}(id=${connection.receiver.id})}">
                         <span th:text="${connection.receiver.name}">name</span>
                     </a>
+                    <form th:method="DELETE" th:action="@{/connections/{id}(id=${connection.id})}">
+                        <input type="submit" value="Poista yhteys!"/>
+                    </form>
                 </li>
             </ul>
 
