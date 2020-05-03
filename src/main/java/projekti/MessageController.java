@@ -21,6 +21,9 @@ public class MessageController {
     private MessageRepository messageRepository;
 
     @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
     AccountRepository accountRepository;
 
     @GetMapping("/messages")
@@ -55,6 +58,16 @@ public class MessageController {
             msg.setLikes(msg.getLikes() + 1);
         }
         messageRepository.save(msg);
+        return "redirect:/messages";
+    }
+
+    @PostMapping("/messages/{id}/comments")
+    public String addComment(@RequestParam String content, @PathVariable Long id) {
+        Message msg = messageRepository.getOne(id);
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setMessage(msg);
+        commentRepository.save(comment);
         return "redirect:/messages";
     }
 }

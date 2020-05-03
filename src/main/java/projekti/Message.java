@@ -4,6 +4,7 @@ package projekti;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,8 @@ public class Message extends AbstractPersistable<Long> {
     private String writer;
     private int likes = 0;
     private String likers;
+    
+    @OneToMany(mappedBy = "message")
+    private List<Comment> comments;
  
 }

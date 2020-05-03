@@ -17,6 +17,17 @@
                     <input type="submit" value="Tykkää!"/>
                 </form>
 
+                <ul>
+                    <li th:each="comment : ${message.comments}">
+                        <span th:text="${comment.content}">comment</span>
+                    </li>
+                </ul>
+
+                <form th:action="@{/messages/{id}/comments(id=${message.id})}" method="POST">
+                    <input name="content"></input>
+                    <input type="submit" value="Lisää kommentti!"></input>
+                </form>
+
             </li>
         </ul>
 
